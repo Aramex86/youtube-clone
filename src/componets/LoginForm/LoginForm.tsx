@@ -5,6 +5,7 @@ import logo from "../../assets/sibdev-logo.png";
 import Button from "@material-ui/core/Button";
 import { BsEyeSlash } from "react-icons/bs";
 import { BsEye } from "react-icons/bs";
+import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -107,14 +108,22 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+type Inputs = {
+  login: string;
+  password: string | number;
+};
+
 const LoginForm = () => {
-  const classes = useStyles();
-  const [showPass, setShowPass] = useState(false);
+    const classes = useStyles();
+    const [showPass, setShowPass] = useState(false);
+    const { register, handleSubmit, watch, errors } = useForm<Inputs>();
+    const onSubmit = (data: Inputs) => {
+        console.log(data)   
+    };
 
   const handlePassword = () => {
     setShowPass(!showPass);
   };
-  console.log(showPass);
   return (
     <div className={classes.loginPage}>
       <div className={classes.formWrap}>
@@ -122,19 +131,28 @@ const LoginForm = () => {
           <img src={logo} alt="logo" />
           <span>Вход</span>
         </div>
-        <form className={classes.root} noValidate autoComplete="off">
+        <form
+          className={classes.root}
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <TextField
             id="outlined-basic"
             label="Login"
             variant="outlined"
+            name="login"
             className={classes.loginFieleld}
+            inputRef={register({ required: true })}
           />
           <TextField
             id="outlined-basic"
             label="Password"
+            name="password"
             variant="outlined"
             className={classes.loginPassword}
-            type={showPass?'text':'password'}
+            type={showPass ? "text" : "password"}
+            inputRef={register({ required: true })}
           />
           {showPass ? (
             <BsEye className={classes.formEye} onClick={handlePassword} />
@@ -146,6 +164,7 @@ const LoginForm = () => {
             variant="contained"
             color="primary"
             className={classes.formBtn}
+            type="submit"
           >
             Войти
           </Button>

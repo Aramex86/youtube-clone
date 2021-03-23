@@ -1,11 +1,87 @@
-import React from 'react'
+import React from "react";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { BiGridAlt } from "react-icons/bi";
+import { AiOutlineUnorderedList } from "react-icons/ai";
+import Cards from "./Crads";
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    resultsWrapp: {
+      position: "absolute",
+      width: 1040,
+      left: "50%",
+      top: "54%",
+      transform: "translate(-50%,-50%)",
+      bottom: 0,
+    },
+    header: {
+      display: "flex",
+      justifyContent: "space-between",
+      height: 24,
+      padding: "0 .5rem",
+      alignItems: "center",
+      fontSize: "1.6rem",
+      fontWeight: 400,
+      marginBottom: 20,
+    },
+    switchList: {
+      "& svg": {
+        width: 24,
+        height: 24,
+        cursor: "pointer",
+        "&:nth-child(1)": {
+          marginRight: 20,
+        },
+      },
+    },
+    cradsWrap: {
+      display: "flex",
+      justifyContent: "center",
+      flexWrap: "wrap",
+      gap: 20,
+      alignItems: "center",
+    //   outline: "1px solid red",
+      msOverflowStyle: "none" /* IE and Edge */,
+      scrollbarWidth: "none" /*Firefox */,
+      overflowY: "scroll",
+      height: 700,
+      "&::-webkit-scrollbar": {
+        display: "none",
+      },
+    },
+  })
+);
 const SearchResults = () => {
-    return (
-        <div>
-        <h1>SearchResuts</h1>
-        </div>
-    )
-}
+  const classes = useStyles();
 
-export default SearchResults
+  const handleList = () => {
+    console.log("LIST");
+  };
+  const handaleGrid = () => {
+    console.log("GRID");
+  };
+
+  return (
+    <div className={classes.resultsWrapp}>
+      <div className={classes.header}>
+        <h3>Видео по запросу «чем кормить кота»</h3>
+        <div className={classes.switchList}>
+          <AiOutlineUnorderedList onClick={handleList} />
+          <BiGridAlt onClick={handaleGrid} />
+        </div>
+      </div>
+      <div className={classes.cradsWrap}>
+        <Cards />
+        <Cards />
+        <Cards />
+        <Cards />
+        <Cards />
+        <Cards />
+        <Cards />
+        <Cards />
+      </div>
+    </div>
+  );
+};
+
+export default SearchResults;
