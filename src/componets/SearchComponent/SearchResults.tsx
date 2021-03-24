@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { BiGridAlt } from "react-icons/bi";
 import { AiOutlineUnorderedList } from "react-icons/ai";
@@ -49,36 +49,48 @@ const useStyles = makeStyles((theme: Theme) =>
         display: "none",
       },
     },
+    cardrsWrapList:{
+      display:'flex',
+      flexDirection:'column',
+      msOverflowStyle: "none" /* IE and Edge */,
+      scrollbarWidth: "none" /*Firefox */,
+      overflowY: "scroll",
+      height: 700,
+      "&::-webkit-scrollbar": {
+        display: "none",
+      },
+
+    },
   })
 );
 const SearchResults = () => {
   const classes = useStyles();
 
-  const handleList = () => {
-    console.log("LIST");
-  };
-  const handaleGrid = () => {
-    console.log("GRID");
-  };
+  const[changeView,setChangeView]=useState(false);
+
+  const handleView=()=>{
+    setChangeView(!changeView);
+  }
 
   return (
     <div className={classes.resultsWrapp}>
       <div className={classes.header}>
-        <h3>Видео по запросу «чем кормить кота»</h3>
+        <h3>Видео по запросу «чем кормить кота» <span style={{color: 'rgba(23, 23, 25, 0.3)',fontSize:'1.6rem',marginLeft:15}}>7230</span></h3>
         <div className={classes.switchList}>
-          <AiOutlineUnorderedList onClick={handleList} />
-          <BiGridAlt onClick={handaleGrid} />
+          <AiOutlineUnorderedList onClick={handleView} />
+          <BiGridAlt onClick={handleView} />
         </div>
       </div>
-      <div className={classes.cradsWrap}>
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
+      <div className={changeView?classes.cardrsWrapList:classes.cradsWrap}>
+        <Cards changeView={changeView}/>
+        <Cards changeView={changeView}/>
+        <Cards changeView={changeView}/>
+        <Cards changeView={changeView}/>
+        <Cards changeView={changeView}/>
+        <Cards changeView={changeView}/>
+        <Cards changeView={changeView}/>
+        <Cards changeView={changeView}/>
+     
       </div>
     </div>
   );

@@ -1,9 +1,5 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import logo from "../../assets/sibdev-logo.png";
 import {FaRegHeart} from 'react-icons/fa';
 
 import SearchResults from './SearchResults'; 
@@ -24,6 +20,10 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: "1.5rem",
       border: "1px solid #F1F1F1",
       boxShadow: "none",
+      '& .MuiToolbar-gutters':{
+        paddingLeft: '28.5rem',
+        paddingRight: '28.5rem',
+      },
     },
     menu: {
       display: "flex",
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     toolbar: {
       display: "flex",
-      justifyContent: "space-around",
+      justifyContent: "space-between",
     },
     logo: {
       width: 48,
@@ -113,25 +113,7 @@ const SearchComponent = () => {
 
   return (
     <>
-      <AppBar position="static" className={classes.header}>
-        <Toolbar className={classes.toolbar}>
-          <ul className={classes.menu}>
-            <img src={logo} alt="logo" className={classes.logo} />
-            <Button color="inherit">Поиск</Button>{" "}
-            <Button color="inherit">Избраное</Button>
-          </ul>
-          <Button
-            color="inherit"
-            style={{
-              background: "transparent",
-              fontSize: "1.5rem",
-              fontWeight: 400,
-            }}
-          >
-            Выйти
-          </Button>
-        </Toolbar>
-      </AppBar>
+     
       <div className={classes.bodyWrapp}>
         <div className={classes.heading}>
           <h1>Поиск видео</h1>

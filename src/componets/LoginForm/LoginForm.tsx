@@ -138,7 +138,7 @@ const LoginForm = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <TextField
-            id="outlined-basic"
+            id="logic"
             label="Login"
             variant="outlined"
             name="login"
@@ -146,7 +146,7 @@ const LoginForm = () => {
             inputRef={register({ required: true })}
           />
           <TextField
-            id="outlined-basic"
+            id="password"
             label="Password"
             name="password"
             variant="outlined"

@@ -6,6 +6,8 @@ import SearchResults from "./componets/SearchComponent/SearchResults";
 import ModalWindow from "./componets/ModalWindow/ModalWindow";
 import { getListsVideos } from "./Api/api";
 import { DataReqType } from "./Types/Types";
+import Favorites from "./componets/Favorites/Favorites";
+import Header from "./componets/Header/Header";
 
 function App() {
   const [x, setX] = useState<DataReqType>();
@@ -21,10 +23,11 @@ function App() {
 
   return (
     <div className="App">
+    <Header/>
      {/*  <LoginForm /> */}
-       <SearchComponent />
-     {/* <SearchResults />
-      <ModalWindow /> */}
+      {/*  <SearchComponent />  */}
+       {/* <Favorites/> */}
+      <ModalWindow /> 
     </div>
   );
 }
