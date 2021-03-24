@@ -5,6 +5,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import logo from "../../assets/sibdev-logo.png";
+import { useHistory } from "react-router-dom";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -37,6 +38,9 @@ const useStyles = makeStyles((theme: Theme) =>
         fontSize: "1.5rem",
         fontWeight: "400",
       },
+      "& a": {
+        textDecoration: "none",
+      },
     },
     toolbar: {
       display: "flex",
@@ -51,13 +55,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Header = () => {
   const classes = useStyles();
+  const history = useHistory();
   return (
     <AppBar position="static" className={classes.header}>
       <Toolbar className={classes.toolbar}>
         <ul className={classes.menu}>
           <img src={logo} alt="logo" className={classes.logo} />
-          <Button color="inherit">Поиск</Button>{" "}
-          <Button color="inherit">Избраное</Button>
+          <Button color="inherit" onClick={() => history.push("/search")}>
+            Поиск
+          </Button>{" "}
+          <Button color="inherit" onClick={() => history.push("/favorites")}>
+            Избраное
+          </Button>
         </ul>
         <Button
           color="inherit"
@@ -66,6 +75,7 @@ const Header = () => {
             fontSize: "1.5rem",
             fontWeight: 400,
           }}
+          onClick={() => history.push("/")}
         >
           Выйти
         </Button>

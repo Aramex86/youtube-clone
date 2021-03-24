@@ -152,7 +152,6 @@ const ModalWindow = () => {
     return `${value}`;
   }
 
-  console.log(count);
 
   return (
     <div className={classes.modalWrap}>

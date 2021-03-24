@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import { BsEyeSlash } from "react-icons/bs";
 import { BsEye } from "react-icons/bs";
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -114,13 +115,15 @@ type Inputs = {
 };
 
 const LoginForm = () => {
-    const classes = useStyles();
-    const [showPass, setShowPass] = useState(false);
-    const { register, handleSubmit, watch, errors } = useForm<Inputs>();
-    const onSubmit = (data: Inputs) => {
-        console.log(data)   
-    };
+  const classes = useStyles();
+  const [showPass, setShowPass] = useState(false);
+  const { register, handleSubmit, watch, errors } = useForm<Inputs>();
+  const onSubmit = (data: Inputs) => {
+    console.log(data);
+  };
+  const history = useHistory();
 
+  console.log(history);
   const handlePassword = () => {
     setShowPass(!showPass);
   };
@@ -165,6 +168,7 @@ const LoginForm = () => {
             color="primary"
             className={classes.formBtn}
             type="submit"
+            onClick={() => history.push("/search")}
           >
             Войти
           </Button>
