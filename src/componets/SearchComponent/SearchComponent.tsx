@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { FaRegHeart } from "react-icons/fa";
 
 import SearchResults from "./SearchResults";
 import Header from "../Header/Header";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getSearchResults,
   searchFav,
   searchValue,
 } from "../../store/reducers/MainPageReducer";
+import Tooltip from "../common/Tooltip";
+import { AppStateType } from "../../store/store/Store";
+import { requestSelector } from "../../store/selectors/MainSelector";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -145,22 +149,20 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 24,
       right: 165,
       top: "calc(50% - 24px/2)",
-      color: "#E5E5E5",
+      color: "#1390E5",
       cursor: "pointer",
-      "&:hover": {
-        color: "#1390E5",
-      },
     },
   })
 );
 
 const SearchComponent = () => {
   const classes = useStyles();
+  const reqNum = useSelector((state:AppStateType)=>requestSelector(state));
   const [textValue, setTextValue] = useState<string>("");
   const [searchVal, setSearchVal] = useState<string>("");
+  const [reqNr,setReqNr]=useState(reqNum);
   const [inputActive, setInputActive] = useState(false);
   const dispatch = useDispatch();
-
   const handaleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchVal(value);
@@ -169,12 +171,16 @@ const SearchComponent = () => {
 
   const handaleSeach = () => {
     dispatch(searchValue(textValue));
-    // dispatch(getSearchResults(searchVal));
+    // dispatch(getSearchResults(searchVal, reqNr));
     if (textValue) {
       setInputActive(true);
     }
   };
+  const handleSearchFav = () => {
+    dispatch(searchFav([textValue]));
+  };
 
+  console.log(reqNr);
   return (
     <>
       <Header />
@@ -193,10 +199,13 @@ const SearchComponent = () => {
               onChange={handaleChange}
             />
             {textValue ? (
-              <FaRegHeart
-                className={classes.add}
-                onClick={() => dispatch(searchFav([textValue]))}
-              />
+              <>
+                <FaRegHeart className={classes.add} onClick={handleSearchFav} />
+                <Tooltip
+                  text="Поиск сохранён в разделе «Избранное»"
+                  link="Перейти в избранное"
+                />
+              </>
             ) : (
               ""
             )}

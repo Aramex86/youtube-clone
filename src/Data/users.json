@@ -1,0 +1,23 @@
+{
+  "code":0,
+  "descr":"OK",
+  "data":{
+    "users":[
+      {
+        "id":12,
+        "login":"Admin",
+        "password":"Admin"
+      },
+      {
+        "id":15,
+        "login":"Jeseca",
+        "password":"1215"
+      },
+      {
+        "id":10,
+        "login":"Steve",
+        "password":"5212"
+      }
+    ]
+  }
+}

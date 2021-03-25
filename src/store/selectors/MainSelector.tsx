@@ -10,3 +10,13 @@ export const serachName=(state:AppStateType)=>{
     return state.mainPage.searchFieldValue;
 }
 
+// export const executeSelector=(state:AppStateType)=>{
+//     return state.mainPage.execute;
+// }
+export const requestSelector=(state:AppStateType)=>{
+    return state.mainPage.reqNumber;
+}
+export const userSelector=(state:AppStateType)=>{
+    return state.mainPage.authUser;
+}
+

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import logo from "../../assets/sibdev-logo.png";
@@ -7,6 +7,11 @@ import { BsEyeSlash } from "react-icons/bs";
 import { BsEye } from "react-icons/bs";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../store/reducers/MainPageReducer";
+import { AppStateType } from "../../store/store/Store";
+import { userSelector } from "../../store/selectors/MainSelector";
+const Users  = require('../../Data/users.json');
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -111,19 +116,40 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Inputs = {
   login: string;
-  password: string | number;
+  password: string |number;
 };
 
-const LoginForm = () => {
+type PropsType={
+  setToken?:any
+}
+
+
+const LoginForm:FC<PropsType> = ({setToken}) => {
+  const dispatch =useDispatch();
   const classes = useStyles();
+  const user = useSelector((state:AppStateType) => userSelector(state));
   const [showPass, setShowPass] = useState(false);
   const { register, handleSubmit, watch, errors } = useForm<Inputs>();
   const onSubmit = (data: Inputs) => {
-    console.log(data);
+    dispatch(getUser(data));
+    validate();
   };
   const history = useHistory();
 
-  console.log(history);
+
+  const validate=()=>{
+    Users.data.users.find((item:any)=>{
+      if(item.password === user?.password){
+      history.push('/search');
+      console.log('Enter');
+      }else{
+        console.log('error');
+      }
+    })
+  }
+
+   console.log(Users.data);
+  //  console.log(user);
   const handlePassword = () => {
     setShowPass(!showPass);
   };
@@ -168,7 +194,7 @@ const LoginForm = () => {
             color="primary"
             className={classes.formBtn}
             type="submit"
-            onClick={() => history.push("/search")}
+            // onClick={() => history.push("/search")}
           >
             Войти
           </Button>

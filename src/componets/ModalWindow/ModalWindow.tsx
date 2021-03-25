@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Select from "@material-ui/core/Select";
@@ -7,6 +7,8 @@ import { FormControl, InputLabel } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
 import Button from "@material-ui/core/Button";
+import { useDispatch } from "react-redux";
+import { requestNumber } from "../../store/reducers/MainPageReducer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,9 +75,9 @@ const useStyles = makeStyles((theme: Theme) =>
       "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
         fontSize: "1.9rem",
       },
-      "& .MuiFormLabel-asterisk.MuiInputLabel-asterisk":{
-          color:'red',
-      }
+      "& .MuiFormLabel-asterisk.MuiInputLabel-asterisk": {
+        color: "red",
+      },
     },
     modalSelect: {
       position: "absolute",
@@ -127,10 +129,10 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 485,
       background: "#1390E5",
       borderRadius: 5,
-      fontSize:'1.5rem',
-      '&:hover':{
+      fontSize: "1.5rem",
+      "&:hover": {
         background: "#1390E5",
-      }
+      },
     },
     btnDontSave: {
       position: "absolute",
@@ -138,20 +140,30 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 52,
       left: 40,
       top: 485,
-      fontSize:'1.5rem',
+      fontSize: "1.5rem",
     },
   })
 );
 
+type PropsType = {
+  request: string;
+  name: string;
+};
+
 const ModalWindow = () => {
   const classes = useStyles();
-  const [count, setCount] = useState<number | string>();
+  const [count, setCount] = useState<number>();
+  const dispatch = useDispatch();
 
   function valuetext(value: number) {
     setCount(value);
     return `${value}`;
   }
+  useEffect(() => {
+    dispatch(requestNumber(Number(count)))
+  }, [count]);
 
+  console.log(count);
 
   return (
     <div className={classes.modalWrap}>

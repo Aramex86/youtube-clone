@@ -12,16 +12,11 @@ import { Switch } from "react-router";
 import { Route } from "react-router-dom";
 
 function App() {
-  const [x, setX] = useState<DataReqType>();
+  const [token, setToken] = useState();
 
-  // useEffect(() => {
-  //   getListsVideos
-  //     .getLists()
-  //     .then((res) => setX(res))
-  //     .catch((err) => console.error(err.response));
-  // }, []);
-
-  // console.log(x?.items);
+  // if(!token){
+  //   return <LoginForm setToken={setToken}/>
+  // }
 
   return (
     <div className="App">
@@ -29,10 +24,12 @@ function App() {
      {/*   <SearchComponent /> 
       <Favorites/> */}
       {/* <ModalWindow />  */}
+     
 
       <Switch>
         <Route exact  path='/search' component={SearchComponent}/>
         <Route exact path="/favorites" component={Favorites}/>
+        <Route exact path='/modal' component={ModalWindow}/>
         <Route path="/" component={LoginForm}/>
       </Switch>
     </div>

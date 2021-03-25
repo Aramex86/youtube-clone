@@ -73,6 +73,7 @@ const SearchResults = () => {
   const resultsTotal = useSelector((state: AppStateType) => getItems(state));
 
 
+
   const handleView = () => {
     setChangeView(!changeView);
   };
@@ -90,7 +91,7 @@ const SearchResults = () => {
               marginLeft: 15,
             }}
           >
-          {/*  {resultsTotal.pageInfo.totalResults} */}2150
+          {/*  {resultsTotal.pageInfo.totalResults} */}{/* 2150 */}
           </span>
         </h3>
         <div className={classes.switchList}>

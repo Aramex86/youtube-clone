@@ -1,9 +1,11 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Header from "../Header/Header";
-import { useSelector } from "react-redux";
-import { serachFav } from "../../store/selectors/MainSelector";
+import { useDispatch, useSelector } from "react-redux";
+import {requestSelector, serachFav, serachName } from "../../store/selectors/MainSelector";
 import { AppStateType } from "../../store/store/Store";
+import { deleteFav, getSearchResults } from "../../store/reducers/MainPageReducer";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -65,17 +67,17 @@ const useStyles = makeStyles((theme: Theme) =>
       cursor: "pointer",
       "&:hover": {
         border: "2px solid #1390E5",
-        "& div":{
-          opacity:5,
-        }
+        "& div": {
+          opacity: 5,
+        },
       },
       "& div": {
         marginRight: 20,
-        width: "13.3rem",
+        width: "20.3rem",
         display: "flex",
         justifyContent: "space-between",
-        opacity:0,
-        transition:'all .2s ease',
+        opacity: 0,
+        transition: "all .2s ease",
       },
     },
     btn: {
@@ -95,37 +97,50 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
-
 const Favorites = () => {
   const classes = useStyles();
+  const reqNum = useSelector((state:AppStateType)=>requestSelector(state));
   const favItems = useSelector((state: AppStateType) => serachFav(state));
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  
+  const handaleExecute=(item:string)=>{
+    history.push('/search');
+    //  dispatch(getSearchResults(item,reqNum));
+  }
 
-  return (<>
-    <Header/>
-    <div className={classes.bodyWrap}>
-      <div className={classes.container}>
-        <h2 className={classes.heading}>Избранное</h2>
-        <ul className={classes.list}>
-          {favItems.map((item,i) => (
-            <li className={classes.listItem} key={i}>
-              {item}{" "}
-              <div>
-                <button className={`${classes.btn} ${classes.btnModify}`}>
-                  Изменить
-                </button>
-                <button className={`${classes.btn} ${classes.btnDelete}`}>
-                  Удалить
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+
+  return (
+    <>
+      <Header />
+      <div className={classes.bodyWrap}>
+        <div className={classes.container}>
+          <h2 className={classes.heading}>Избранное</h2>
+          <ul className={classes.list}>
+            {favItems.map((item, i) => (
+              <li className={classes.listItem} key={i}>
+                {item}{" "}
+                <div>
+                  <button className={`${classes.btn} ${classes.btnModify}`} onClick={()=>handaleExecute(item)}>
+                    Выполнить
+                  </button>
+                  <button className={`${classes.btn} ${classes.btnModify}`} onClick={()=>history.push('/modal')}>
+                    Изменить
+                  </button>
+                  <button
+                    className={`${classes.btn} ${classes.btnDelete}`}
+                    onClick={() => dispatch(deleteFav([item]))}
+                  >
+                    Удалить
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
- </> );
+    </>
+  );
 };
 
 export default Favorites;

@@ -45,3 +45,13 @@ export type DataReqType = {
   nextPageToken: string;
   items:Array<ItemsType>;
 };
+
+export type SearchFavoriteType={
+  id:number,
+  text:string
+}
+
+export type UsersType={
+  login:string,
+  password:string|number
+}

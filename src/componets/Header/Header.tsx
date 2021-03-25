@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 import AppBar from "@material-ui/core/AppBar";
@@ -6,6 +6,11 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import logo from "../../assets/sibdev-logo.png";
 import { useHistory } from "react-router-dom";
+import { AppStateType } from "../../store/store/Store";
+import { useDispatch, useSelector } from "react-redux";
+import { userSelector } from "../../store/selectors/MainSelector";
+import { UsersType } from "../../Types/Types";
+import { getUser } from "../../store/reducers/MainPageReducer";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
@@ -53,9 +58,25 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+
+
 const Header = () => {
+  const removeUser = useSelector((state:AppStateType)=> userSelector(state));
+  const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
+  // const[reset,setReset]=useState({login:'',password:''})
+
+
+  const handaleReset=()=>{
+   
+    dispatch(getUser({login:'',password:''}));
+
+    history.push("/favorites")
+
+  }
+
+  // console.log(reset);
   return (
     <AppBar position="static" className={classes.header}>
       <Toolbar className={classes.toolbar}>
@@ -64,7 +85,7 @@ const Header = () => {
           <Button color="inherit" onClick={() => history.push("/search")}>
             Поиск
           </Button>{" "}
-          <Button color="inherit" onClick={() => history.push("/favorites")}>
+          <Button color="inherit" onClick={handaleReset}>
             Избраное
           </Button>
         </ul>

@@ -1,6 +1,0 @@
-  ItemsType  {
-    etag: string;
-    kind: string;
-    id: IdType;
-    snippet: SnipetType;
-  };
