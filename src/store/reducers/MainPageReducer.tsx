@@ -210,11 +210,8 @@ export const getSearchResults = (
   maxRes: number,
   orderVal: string
 ): ThunkType => async (dispatch: DispatchType) => {
-  const res = await getListsVideos.getLists(
-    value,
-    (maxRes = 12),
-    (orderVal = "date")
-  );
+  const res = await getListsVideos.getLists(value, maxRes,orderVal)
+  
   if (value !== "") {
     dispatch(items(res));
   }

@@ -183,7 +183,7 @@ const SearchComponent = () => {
 
   const handaleSeach = () => {
     dispatch(searchValue(textValue));
-    dispatch(getSearchResults(searchVal, reqNr,''));
+    dispatch(getSearchResults(searchVal, reqNr,'date'));
     if (textValue) {
       setInputActive(true);
     }
