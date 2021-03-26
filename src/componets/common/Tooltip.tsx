@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 5,
       zIndex: 1,
       fontSize: 16,
+
       "& p": {
         marginBottom: 32,
       },
@@ -30,13 +31,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type PropsType = {
   text: string;
-  link: string;
+  link?: string;
+  class?: string;
 };
 
 const Tooltip: FC<PropsType> = (props) => {
   const classes = useStyles();
   return (
-    <div className={classes.tooltipWrap}>
+    <div className={`${classes.tooltipWrap} ${props.class}`}>
       <p>{props.text}</p>
       <Link to={"/favorites"}>{props.link}</Link>
     </div>

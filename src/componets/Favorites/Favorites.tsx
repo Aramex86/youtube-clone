@@ -2,9 +2,18 @@ import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Header from "../Header/Header";
 import { useDispatch, useSelector } from "react-redux";
-import {requestSelector, serachFav, serachName } from "../../store/selectors/MainSelector";
+import {
+  requestSelector,
+  saveReqSelector,
+  serachFav,
+  serachName,
+} from "../../store/selectors/MainSelector";
 import { AppStateType } from "../../store/store/Store";
-import { deleteFav, getSearchResults } from "../../store/reducers/MainPageReducer";
+import {
+  deleteFav,
+  editform,
+  getSearchResults,
+} from "../../store/reducers/MainPageReducer";
 import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -99,16 +108,21 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const Favorites = () => {
   const classes = useStyles();
-  const reqNum = useSelector((state:AppStateType)=>requestSelector(state));
-  const favItems = useSelector((state: AppStateType) => serachFav(state));
+  const favItems = useSelector((state: AppStateType) => saveReqSelector(state));
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const handaleExecute=(item:string)=>{
-    history.push('/search');
-    //  dispatch(getSearchResults(item,reqNum));
-  }
+  const handaleExecute = (item: string) => {
+    const [obj] = favItems;
+    const { request, select, reqNum } = obj;
+    history.push("/search");
+    dispatch(getSearchResults(request, reqNum, select));
+  };
 
+  const changeReq = () => {
+    dispatch(editform(true));
+    history.push("/modal");
+  };
 
   return (
     <>
@@ -117,19 +131,25 @@ const Favorites = () => {
         <div className={classes.container}>
           <h2 className={classes.heading}>Избранное</h2>
           <ul className={classes.list}>
-            {favItems.map((item, i) => (
+            {favItems.map(({ request, nameReq, reqNum }, i) => (
               <li className={classes.listItem} key={i}>
-                {item}{" "}
+                {nameReq}{" "}
                 <div>
-                  <button className={`${classes.btn} ${classes.btnModify}`} onClick={()=>handaleExecute(item)}>
+                  <button
+                    className={`${classes.btn} ${classes.btnModify}`}
+                    onClick={() => handaleExecute(request)}
+                  >
                     Выполнить
                   </button>
-                  <button className={`${classes.btn} ${classes.btnModify}`} onClick={()=>history.push('/modal')}>
+                  <button
+                    className={`${classes.btn} ${classes.btnModify}`}
+                    onClick={changeReq}
+                  >
                     Изменить
                   </button>
                   <button
                     className={`${classes.btn} ${classes.btnDelete}`}
-                    onClick={() => dispatch(deleteFav([item]))}
+                    onClick={() => dispatch(deleteFav([nameReq]))}
                   >
                     Удалить
                   </button>

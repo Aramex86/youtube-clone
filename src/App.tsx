@@ -2,30 +2,45 @@ import React, { useEffect, useState } from "react";
 import "../src/Sass/App.scss";
 import LoginForm from "./componets/LoginForm/LoginForm";
 import SearchComponent from "./componets/SearchComponent/SearchComponent";
-import SearchResults from "./componets/SearchComponent/SearchResults";
 import ModalWindow from "./componets/ModalWindow/ModalWindow";
-import { getListsVideos } from "./Api/api";
-import { DataReqType } from "./Types/Types";
 import Favorites from "./componets/Favorites/Favorites";
-import Header from "./componets/Header/Header";
-import { Switch } from "react-router";
+import { Switch, useHistory } from "react-router";
 import { Route } from "react-router-dom";
+import { AppStateType } from "./store/store/Store";
+import { userSelector } from "./store/selectors/MainSelector";
+import { useSelector } from "react-redux";
+const Users = require("../src/Data/users.json");
+
+
 
 function App() {
   const [token, setToken] = useState();
+  const history = useHistory();
+  const user = useSelector((state:AppStateType)=>userSelector(state));
 
+
+  if(user){
+    Users.data.users.find(({password}:any)=>{
+      // console.log(password)
+      if(password === user.password){
+        history.push('/search');
+      }
+    })
+  }else{
+    history.push('/')
+  }
+
+
+  // console.log(user);
+  // console.log(Users);
   // if(!token){
   //   return <LoginForm setToken={setToken}/>
   // }
 
+
+
   return (
     <div className="App">
-      {/*  <LoginForm /> */}
-     {/*   <SearchComponent /> 
-      <Favorites/> */}
-      {/* <ModalWindow />  */}
-     
-
       <Switch>
         <Route exact  path='/search' component={SearchComponent}/>
         <Route exact path="/favorites" component={Favorites}/>

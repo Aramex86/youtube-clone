@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { FaRegHeart } from "react-icons/fa";
+import { RiFolderAddLine } from "react-icons/ri";
 
 import SearchResults from "./SearchResults";
 import Header from "../Header/Header";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  editform,
   getSearchResults,
   searchFav,
   searchValue,
 } from "../../store/reducers/MainPageReducer";
 import Tooltip from "../common/Tooltip";
 import { AppStateType } from "../../store/store/Store";
-import { requestSelector } from "../../store/selectors/MainSelector";
+import { editSelector, requestSelector } from "../../store/selectors/MainSelector";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -144,7 +147,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     add: {
       position: "absolute",
-      // visibility: 'hidden',
       width: 24,
       height: 24,
       right: 165,
@@ -152,17 +154,27 @@ const useStyles = makeStyles((theme: Theme) =>
       color: "#1390E5",
       cursor: "pointer",
     },
+    addSave: {
+      right: 202,
+    },
+    save: {
+      height: 30,
+      width: 170,
+    },
   })
 );
 
 const SearchComponent = () => {
   const classes = useStyles();
-  const reqNum = useSelector((state:AppStateType)=>requestSelector(state));
+  const reqNum = useSelector((state: AppStateType) => requestSelector(state));
   const [textValue, setTextValue] = useState<string>("");
   const [searchVal, setSearchVal] = useState<string>("");
-  const [reqNr,setReqNr]=useState(reqNum);
+  const [showTool, setShowTool] = useState<boolean>(false);
+  const [reqNr, setReqNr] = useState(reqNum);
   const [inputActive, setInputActive] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
+
   const handaleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchVal(value);
@@ -171,16 +183,22 @@ const SearchComponent = () => {
 
   const handaleSeach = () => {
     dispatch(searchValue(textValue));
-    // dispatch(getSearchResults(searchVal, reqNr));
+    dispatch(getSearchResults(searchVal, reqNr,''));
     if (textValue) {
       setInputActive(true);
     }
   };
-  const handleSearchFav = () => {
-    dispatch(searchFav([textValue]));
+  // const handleSearchFav = () => {
+  //   dispatch(searchFav([textValue]));
+  // };
+  
+  const handleSave = () => {
+    dispatch(searchValue(textValue));
+    history.push("/modal");
+    setShowTool(false);
+    dispatch(editform(false));
   };
 
-  console.log(reqNr);
   return (
     <>
       <Header />
@@ -200,11 +218,18 @@ const SearchComponent = () => {
             />
             {textValue ? (
               <>
-                <FaRegHeart className={classes.add} onClick={handleSearchFav} />
-                <Tooltip
-                  text="Поиск сохранён в разделе «Избранное»"
-                  link="Перейти в избранное"
+                <FaRegHeart
+                  className={classes.add}
+                  onClick={handleSave}
+                  onMouseEnter={() => setShowTool(true)}
                 />
+
+                {showTool ? (
+                  <Tooltip
+                    text="Сохранить в раздел «Избранное»"
+                    link="Перейти в избранное"
+                  />
+                ) : null}
               </>
             ) : (
               ""

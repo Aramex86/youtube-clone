@@ -19,4 +19,11 @@ export const requestSelector=(state:AppStateType)=>{
 export const userSelector=(state:AppStateType)=>{
     return state.mainPage.authUser;
 }
+export const saveReqSelector=(state:AppStateType)=>{
+    return state.mainPage.savedReq;
+}
+
+export const editSelector=(state:AppStateType)=>{
+    return state.mainPage.edit;
+}
 

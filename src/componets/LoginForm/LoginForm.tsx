@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../store/reducers/MainPageReducer";
 import { AppStateType } from "../../store/store/Store";
 import { userSelector } from "../../store/selectors/MainSelector";
-const Users  = require('../../Data/users.json');
+const Users = require("../../Data/users.json");
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -116,39 +116,36 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Inputs = {
   login: string;
-  password: string |number;
+  password: string | number;
 };
 
-type PropsType={
-  setToken?:any
-}
+type PropsType = {
+  setToken?: any;
+};
 
-
-const LoginForm:FC<PropsType> = ({setToken}) => {
-  const dispatch =useDispatch();
+const LoginForm: FC<PropsType> = ({ setToken }) => {
+  const dispatch = useDispatch();
   const classes = useStyles();
-  const user = useSelector((state:AppStateType) => userSelector(state));
+  const user = useSelector((state: AppStateType) => userSelector(state));
   const [showPass, setShowPass] = useState(false);
-  const { register, handleSubmit, watch, errors } = useForm<Inputs>();
-  const onSubmit = (data: Inputs) => {
+  const { register, handleSubmit, watch, errors, reset } = useForm<Inputs>();
+  const onSubmit = (data: Inputs, e: any) => {
     dispatch(getUser(data));
-    validate();
+    // validate();
   };
   const history = useHistory();
 
+  // const validate = () => {
+  //   Users.data.users.find((item: any) => {
+  //     if (item.password === user?.password) {
+  //       history.push("/search");
+  //       console.log("Enter");
+  //     } else {
+  //       console.log("error");
+  //     }
+  //   });
+  // };
 
-  const validate=()=>{
-    Users.data.users.find((item:any)=>{
-      if(item.password === user?.password){
-      history.push('/search');
-      console.log('Enter');
-      }else{
-        console.log('error');
-      }
-    })
-  }
-
-   console.log(Users.data);
   //  console.log(user);
   const handlePassword = () => {
     setShowPass(!showPass);
@@ -194,7 +191,6 @@ const LoginForm:FC<PropsType> = ({setToken}) => {
             color="primary"
             className={classes.formBtn}
             type="submit"
-            // onClick={() => history.push("/search")}
           >
             Войти
           </Button>

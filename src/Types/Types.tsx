@@ -55,3 +55,10 @@ export type UsersType={
   login:string,
   password:string|number
 }
+
+export type SavedRequestType={
+  request:string,
+  nameReq:string,
+  reqNum:number,
+  select:string
+}

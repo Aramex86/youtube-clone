@@ -1,23 +1,28 @@
+import { type } from "node:os";
 import { Dispatch } from "react";
 import { ThunkAction } from "redux-thunk";
 import { getListsVideos } from "../../Api/api";
-import { DataReqType, UsersType } from "../../Types/Types";
+import { DataReqType, SavedRequestType, UsersType } from "../../Types/Types";
 import { AppStateType } from "../store/Store";
 
 const SEARCH_FIELD = "mainpageReducer/SEARCH_FIELD";
 const SEARCH_RESULTS = "mainpageReducer/SEARCH_RESULTS";
 const SEARCH_FAVORITE = "mainpageReducer/SEARCH_FAVORITE";
-// const EXECUTE = "mainpageReducer/EXECUTE";
+const EDIT = "mainpageReducer/EDIT";
 const DELETE_ITEM_FAVORITE = "mainpageReducer/DELETE_ITEM_FAVORITE";
 const USER = "mainpageReducer/USER";
 const REQUEST_NUMBER = "mainpageReducer/REQUEST_NUMBER";
+const SAVE_REQUEST = "mainpageReducer/SAVE_REQUEST";
+const UPDATE_REQUEST = "mainpageReducer/UPDATE_REQUEST";
 
 const initialState = {
   searchFieldValue: "",
   searchResults: {} as DataReqType,
   searchFavorite: [] as Array<string>,
-  authUser: {} as UsersType ,
-  reqNumber:12,
+  authUser: {} as UsersType,
+  reqNumber: 12,
+  savedReq: [] as Array<SavedRequestType>,
+  edit: false,
 };
 
 type initialStateType = typeof initialState;
@@ -28,7 +33,10 @@ type ActionsTypes =
   | SearchFav
   | DeleteFavType
   | UserType
-  | ReqNumberType;
+  | ReqNumberType
+  | SeavedReqType
+  | UpdateRequestType
+  | EditType;
 
 type DispatchType = Dispatch<ActionsTypes>;
 type ThunkType = ThunkAction<
@@ -58,14 +66,13 @@ const mainPageReducer = (
     case DELETE_ITEM_FAVORITE: {
       return {
         ...state,
-        searchFavorite: [
-          ...state.searchFavorite.filter(
-            (item) => item !== action.deteleFavorite.join()
+        savedReq: [
+          ...state.savedReq.filter(
+            ({ nameReq }) => nameReq !== action.deteleFavorite.join()
           ),
         ],
       };
     }
-
     case USER: {
       return {
         ...state,
@@ -85,11 +92,47 @@ const mainPageReducer = (
         searchResults: action.searchResults,
       };
     }
+    case SAVE_REQUEST: {
+      return {
+        ...state,
+        savedReq: [...state.savedReq, ...action.savedReq],
+      };
+    }
+    // case UPDATE_REQUEST: {
+    //   return {
+    //     ...state,
+    //      savedReq: [...state.savedReq.map((item,i)=>{
+    //       if(item.nameReq === action.updateRequest.nameReq){
+    //         return{
+    //           ...item,
+    //           nameReq:action.updateRequest.nameReq,
+    //           request:action.updateRequest.request,
+    //           reqNum:action.updateRequest.reqNum,
+    //           select:action.updateRequest.select,
+    //         }
+    //       }
+    //     })],
+    //   };
+    // }
+    case EDIT: {
+      return {
+        ...state,
+        edit: action.edit,
+      };
+    }
     default:
       return state;
   }
 };
 
+type EditType = {
+  type: typeof EDIT;
+  edit: boolean;
+};
+
+export const editform = (edit:boolean): EditType => {
+  return { type: EDIT,edit };
+};
 type SearchFieldValueType = {
   type: typeof SEARCH_FIELD;
   searchFieldValue: string;
@@ -140,11 +183,38 @@ type ReqNumberType = {
 export const requestNumber = (reqNumber: number): ReqNumberType => {
   return { type: REQUEST_NUMBER, reqNumber };
 };
+type SeavedReqType = {
+  type: typeof SAVE_REQUEST;
+  savedReq: Array<SavedRequestType>;
+};
 
-export const getSearchResults = (value: string,maxRes:number): ThunkType => async (
-  dispatch: DispatchType
-) => {
-  const res = await getListsVideos.getLists(value,maxRes);
+export const saveRequesModal = (
+  savedReq: Array<SavedRequestType>
+): SeavedReqType => {
+  return { type: SAVE_REQUEST, savedReq };
+};
+
+export type UpdateRequestType = {
+  type: typeof UPDATE_REQUEST;
+  updateRequest: SavedRequestType;
+};
+
+export const updateRequest = (
+  updateRequest: SavedRequestType
+): UpdateRequestType => {
+  return { type: UPDATE_REQUEST, updateRequest };
+};
+
+export const getSearchResults = (
+  value: string,
+  maxRes: number,
+  orderVal: string
+): ThunkType => async (dispatch: DispatchType) => {
+  const res = await getListsVideos.getLists(
+    value,
+    (maxRes = 12),
+    (orderVal = "date")
+  );
   if (value !== "") {
     dispatch(items(res));
   }
