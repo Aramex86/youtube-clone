@@ -114,9 +114,9 @@ const Favorites = () => {
 
   const handaleExecute = (item: string) => {
     const [obj] = favItems;
-    const { request, select, reqNum } = obj;
+    const { request, select='date', reqNum } = obj;
     history.push("/search");
-    dispatch(getSearchResults(request, reqNum, select));
+    // dispatch(getSearchResults(request, reqNum, select?select:'date'));
   };
 
   const changeReq = () => {

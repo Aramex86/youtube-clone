@@ -17,7 +17,11 @@ import { useForm, Controller } from "react-hook-form";
 import { SavedRequestType } from "../../Types/Types";
 import { useHistory } from "react-router";
 import { AppStateType } from "../../store/store/Store";
-import { editSelector, serachName } from "../../store/selectors/MainSelector";
+import {
+  editSelector,
+  saveReqSelector,
+  serachName,
+} from "../../store/selectors/MainSelector";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -166,24 +170,48 @@ const ModalWindow = () => {
   const classes = useStyles();
   const [count, setCount] = useState<number>();
   const [val, setVal] = useState("");
+  const [data, setData] = useState<SavedRequestType>();
   const dispatch = useDispatch();
   const history = useHistory();
   const reqVal = useSelector((state: AppStateType) => serachName(state));
   const edit = useSelector((state: AppStateType) => editSelector(state));
-  const {
-    register,
-    handleSubmit,
-    control,
-  } = useForm<SavedRequestType>();
+  const savedReq = useSelector((state: AppStateType) => saveReqSelector(state));
+  const { register, handleSubmit, control } = useForm<SavedRequestType>();
 
+  const savedName = savedReq.map(({ request }) => request).join();
+
+  console.log(savedReq);
   const onSubmit = (data: SavedRequestType) => {
-    if (edit === false) {
-      dispatch(saveRequesModal([data]));
-      history.push("/favorites");
+    if (savedReq.length > 0) {
+      update(data);
     } else {
-      dispatch(updateRequest(data));
-      history.push("/favorites");
+      createReq(data);
     }
+    // if (savedName === data.request) {
+    //   console.log(data.request);
+    //   dispatch(updateRequest(data));
+    //   history.push("/favorites");
+    //   console.log(data);
+    // }
+  };
+
+  const createReq = (data: SavedRequestType) => {
+    data.updated= false;
+    dispatch(saveRequesModal([data]));
+    history.push("/favorites");
+    console.log(data);
+  };
+
+  const update = (data: SavedRequestType) => {
+    savedReq.find((item) => {
+      if (item.request === data.request) {
+        data.updated = true;
+        console.log(data.request);
+        dispatch(updateRequest(data));
+        history.push("/favorites");
+        console.log(data);
+      }
+    });
   };
 
   function valuetext(value: number) {

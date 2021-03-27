@@ -61,4 +61,5 @@ export type SavedRequestType={
   nameReq:string,
   reqNum:number,
   select:string
+  updated:boolean,
 }

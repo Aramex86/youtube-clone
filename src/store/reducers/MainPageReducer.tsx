@@ -21,7 +21,7 @@ const initialState = {
   searchFavorite: [] as Array<string>,
   authUser: {} as UsersType,
   reqNumber: 12,
-  savedReq: [] as Array<SavedRequestType>,
+  savedReq: [] as Array<SavedRequestType> ,
   edit: false,
 };
 
@@ -98,22 +98,24 @@ const mainPageReducer = (
         savedReq: [...state.savedReq, ...action.savedReq],
       };
     }
-    // case UPDATE_REQUEST: {
-    //   return {
-    //     ...state,
-    //      savedReq: [...state.savedReq.map((item,i)=>{
-    //       if(item.nameReq === action.updateRequest.nameReq){
-    //         return{
-    //           ...item,
-    //           nameReq:action.updateRequest.nameReq,
-    //           request:action.updateRequest.request,
-    //           reqNum:action.updateRequest.reqNum,
-    //           select:action.updateRequest.select,
-    //         }
-    //       }
-    //     })],
-    //   };
-    // }
+    case UPDATE_REQUEST: {
+      return {
+        ...state,
+        savedReq: [...state.savedReq.map(item=>{
+          if(item.request === action.updateRequest.request){
+            return{
+              ...item,
+             request:action.updateRequest.request,
+             reqNum:action.updateRequest.reqNum,
+             nameReq:action.updateRequest.nameReq,
+             select:action.updateRequest.select,
+             updated:action.updateRequest.updated
+            }
+          }
+          return item;
+        })]
+      };
+    }
     case EDIT: {
       return {
         ...state,
@@ -130,8 +132,8 @@ type EditType = {
   edit: boolean;
 };
 
-export const editform = (edit:boolean): EditType => {
-  return { type: EDIT,edit };
+export const editform = (edit: boolean): EditType => {
+  return { type: EDIT, edit };
 };
 type SearchFieldValueType = {
   type: typeof SEARCH_FIELD;
@@ -198,11 +200,13 @@ export type UpdateRequestType = {
   type: typeof UPDATE_REQUEST;
   updateRequest: SavedRequestType;
 };
-
 export const updateRequest = (
   updateRequest: SavedRequestType
 ): UpdateRequestType => {
-  return { type: UPDATE_REQUEST, updateRequest };
+  return {
+    type: UPDATE_REQUEST,
+    updateRequest
+  };
 };
 
 export const getSearchResults = (
@@ -210,8 +214,8 @@ export const getSearchResults = (
   maxRes: number,
   orderVal: string
 ): ThunkType => async (dispatch: DispatchType) => {
-  const res = await getListsVideos.getLists(value, maxRes,orderVal)
-  
+  const res = await getListsVideos.getLists(value, maxRes, orderVal);
+
   if (value !== "") {
     dispatch(items(res));
   }
